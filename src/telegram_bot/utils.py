@@ -22,13 +22,15 @@ string_to_day_dict = {
 
 
 def string_to_day(day_name: str) -> int:
-    """Принимает название дня недели в виде строки, возвращает его порядковый номер"""
+    """Принимает название дня недели в виде строки, возвращает его порядковый номер (1-7)"""
     return string_to_day_dict[day_name]
 
 
 def day_to_string(day: int) -> str:
+    """Принимает порядковый номер дня недели (1-7), возвращает название дня недели в виде строки"""
     return day_to_string_dict[day]
 
 
 def building_to_string(building: Building) -> str:
+    """Возвращает строку с названием корпуса"""
     return building_to_string_dict[building]

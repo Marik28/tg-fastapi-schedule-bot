@@ -5,6 +5,7 @@ from telegram_bot.settings import settings
 
 
 def parse_parity(week_num: int) -> Parity:
+    """Получает четность, исходя из порядкового номера недели"""
     return Parity.NUMERATOR if (settings.start_week - week_num) % 2 == 1 else Parity.DENOMINATOR
 
 

@@ -5,6 +5,7 @@ from ..utils import day_to_string, building_to_string
 
 
 def render_week_schedule(lessons: list[Lesson]) -> str:
+    """Формирует строку с расписанием на неделю"""
     week_schedule = []
     for day in WeekDay:
         one_day_lessons = [lesson for lesson in lessons if lesson.day == day]
@@ -13,6 +14,7 @@ def render_week_schedule(lessons: list[Lesson]) -> str:
 
 
 def render_day_schedule(lessons: list[Lesson], day: Union[WeekDay, int]) -> str:
+    """Формирует строку с расписанием на день"""
     if not lessons:
         return ""
     day = day_to_string(day)
@@ -22,16 +24,19 @@ def render_day_schedule(lessons: list[Lesson], day: Union[WeekDay, int]) -> str:
 
 
 def render_lesson(lesson: Lesson) -> str:
+    """Формирует строку с информацией о паре"""
     teacher = render_teacher(lesson.teacher)
     classroom = render_classroom(lesson.classroom)
     return f"`{lesson.time}` - {lesson.subject.name}({lesson.kind}) - _{teacher}_. {classroom}"
 
 
 def render_teacher(teacher: Teacher) -> str:
+    """Формирует строку с информацией о преподавателе"""
     return f"{teacher.second_name} {teacher.first_name} {teacher.middle_name}"
 
 
 def render_classroom(classroom: Optional[ClassRoom]) -> str:
+    """Формирует строку с информацией о аудитории"""
     if classroom is not None:
         building = building_to_string(classroom.building)
         number = classroom.number

@@ -26,6 +26,7 @@ async def fetch(endpoint: str, query: dict = None) -> Union[dict, list]:
 
 
 async def fetch_group_list() -> list[Group]:
+    """Получает список доступных групп запросом с сервера"""
     group_list = await fetch(settings.groups_endpoint)
     groups: list[Group] = [Group.parse_obj(group) for group in group_list]
     update_available_groups([group.name for group in groups])
@@ -38,6 +39,7 @@ async def fetch_lesson_list(
         parity: int = None,
         day: int = None
 ) -> list[Lesson]:
+    """Получает список пар запросом с сервера"""
     query = {}
     if group is not None:
         query["group"] = group
