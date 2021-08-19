@@ -1,0 +1,6 @@
+pydantic
+aiogram
+aiohttp
+aioredis
+redis
+loguru
