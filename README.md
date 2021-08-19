@@ -4,3 +4,7 @@
 пар для студентов различных групп и подгрупп
 
 Использует API-сервис https://github.com/Marik28/univer-fastapi.git
+
+## Зависимости:
+- python3.9
+- redis
