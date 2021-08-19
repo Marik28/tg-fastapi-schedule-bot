@@ -1,3 +1,5 @@
+import traceback
+
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiohttp import ClientConnectorError
@@ -16,10 +18,12 @@ def catch_error(func):
         except ClientConnectorError:
             msg = "Сервер не отвечает"
             await message.answer(msg)
+            logger.error(f"Message: {message.text}, user: {message.from_user}, error: {traceback.format_exc()}")
             raise
         except Exception:
             msg = "Произошла непредвиденная ошибка"
             await message.answer(msg)
+            logger.error(f"Message: {message.text}, user: {message.from_user}, error: {traceback.format_exc()}")
             raise
 
     return wrapper
