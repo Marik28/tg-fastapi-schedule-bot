@@ -12,10 +12,9 @@ from .services.api import get_week_schedule, get_groups_to_choose, get_day_sched
 from .services.date_time_utils import get_current_week_parity, get_next_week_parity
 from .services.decorators import catch_error
 from .services.redis_utils import get_available_groups
-from .services.rendering import render_week_schedule
+from .services.rendering import render_week_schedule, day_to_string_dict, string_to_day
 from .settings import settings
 from .states import ChooseGroup, ChooseDay
-from .utils import day_to_string_dict, string_to_day
 
 bot = Bot(token=settings.TELEGRAM_API_TOKEN)
 dp = Dispatcher(
