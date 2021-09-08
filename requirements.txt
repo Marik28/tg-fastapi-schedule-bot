@@ -1,4 +1,5 @@
 pydantic
+pytz
 aiogram
 aiohttp
 aioredis==1.3.1

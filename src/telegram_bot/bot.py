@@ -1,3 +1,5 @@
+import datetime
+
 from aiogram import Bot, types
 from aiogram.contrib.fsm_storage.redis import RedisStorage
 from aiogram.dispatcher import Dispatcher, FSMContext
@@ -9,7 +11,7 @@ from .models import Parity
 from .models import Subgroup
 from .services.api import fetch_lesson_list
 from .services.api import get_week_schedule, get_groups_to_choose, get_day_schedule
-from .services.date_time_utils import get_current_week_parity, get_next_week_parity
+from .services.date_time_utils import get_current_week_parity, get_next_week_parity, now, get_week_day, get_week_parity
 from .services.decorators import catch_error
 from .services.redis_utils import get_available_groups
 from .services.rendering import render_week_schedule, day_to_string_dict, string_to_day
@@ -155,3 +157,23 @@ async def day_chosen(message: types.Message, state: FSMContext):
     schedule, keyboard = await get_day_schedule(parity, day, state)
     await message.answer(schedule, parse_mode=ParseMode.MARKDOWN, reply_markup=keyboard)
     await state.reset_state(with_data=False)
+
+
+@dp.message_handler(commands=["today"])
+@catch_error
+async def process_today_command(message: types.Message, state: FSMContext):
+    current_time = now()
+    day = get_week_day(current_time)
+    parity = get_week_parity(current_time)
+    schedule, keyboard = await get_day_schedule(parity, day, state)
+    await message.answer(schedule, parse_mode=ParseMode.MARKDOWN, reply_markup=keyboard)
+
+
+@dp.message_handler(commands=["tomorrow"])
+@catch_error
+async def process_today_command(message: types.Message, state: FSMContext):
+    current_time = now() + datetime.timedelta(days=1)
+    day = get_week_day(current_time)
+    parity = get_week_parity(current_time)
+    schedule, keyboard = await get_day_schedule(parity, day, state)
+    await message.answer(schedule, parse_mode=ParseMode.MARKDOWN, reply_markup=keyboard)

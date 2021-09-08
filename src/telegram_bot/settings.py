@@ -5,6 +5,7 @@ class Settings(BaseSettings):
     TELEGRAM_API_TOKEN: str
 
     start_week: int = 35
+    timezone_id: str = 'Asia/Almaty'
 
     api_base_url: str = "http://localhost:5050"
     lessons_endpoint: str = "/lessons/"
