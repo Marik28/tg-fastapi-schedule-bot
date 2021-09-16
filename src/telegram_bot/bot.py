@@ -150,7 +150,7 @@ async def day_chosen(message: types.Message, state: FSMContext):
     parity = get_current_week_parity()
     day = string_to_day(day)
     schedule = await get_day_schedule(parity, day, state)
-    await message.answer(schedule, parse_mode=ParseMode.MARKDOWN)
+    await message.answer(schedule, parse_mode=ParseMode.MARKDOWN, reply_markup=ReplyKeyboardRemove())
     await state.reset_state(with_data=False)
 
 
