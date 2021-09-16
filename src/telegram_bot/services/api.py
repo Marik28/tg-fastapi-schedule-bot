@@ -1,14 +1,12 @@
 from typing import Union
 
 import aiohttp
-from aiogram.dispatcher import FSMContext
 from aiogram.types import ReplyKeyboardMarkup
 
 from ..keyboards import create_group_list_keyboard
-from ..models import Group, Lesson, Parity
+from ..models import Group, Lesson
 from ..models.assignments import Assignment
 from ..services.redis_utils import update_available_groups
-from ..services.rendering import render_week_schedule, render_day_schedule
 from ..settings import settings
 
 
@@ -57,31 +55,6 @@ async def fetch_lesson_list(
         query["day"] = day
     lessons = await fetch(settings.lessons_endpoint, query)
     return [Lesson.parse_obj(lesson) for lesson in lessons]
-
-
-async def get_week_schedule(parity: Parity, state: FSMContext) -> str:
-    """Получает расписание на неделю, используя переданную четность и состояние,
-    из которого получает группу и подгруппу пользователя. Если у пользователя не выбрана группа или подгруппа,
-    то состояние переключится на выбор оной"""
-    user_data = await state.get_data()
-    group = user_data.get("group")
-    subgroup = user_data.get("subgroup")
-
-    response = await fetch_lesson_list(parity=parity, group=group, subgroup=subgroup)
-    return render_week_schedule(response)
-
-
-async def get_day_schedule(
-        parity: Parity,
-        day: int,
-        state: FSMContext
-) -> str:
-    user_data = await state.get_data()
-    group = user_data.get("group")
-    subgroup = user_data.get("subgroup")
-    response = await fetch_lesson_list(parity=parity, group=group, subgroup=subgroup, day=day)
-    schedule = render_day_schedule(response, day) or "В этот день пар нет"
-    return schedule
 
 
 async def get_groups_to_choose() -> ReplyKeyboardMarkup:
