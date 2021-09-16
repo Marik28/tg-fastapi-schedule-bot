@@ -11,7 +11,7 @@ from .lessons import (
 )
 
 from .subjects import (
-    Subject,
+    LessonSubject,
 )
 
 from .teachers import (

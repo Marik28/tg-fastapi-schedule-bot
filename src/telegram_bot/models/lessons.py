@@ -5,7 +5,7 @@ from typing import Optional
 from pydantic import BaseModel, Field
 
 from .groups import Group, Subgroup
-from .subjects import Subject
+from .subjects import LessonSubject
 from .teachers import Teacher
 
 
@@ -61,7 +61,7 @@ class LessonKind(str, Enum):
 
 class BaseLesson(BaseModel):
     """Модель, описывающая пару"""
-    subject: Subject = Field(..., description="Предмет, по которому проходит пара")
+    subject: LessonSubject = Field(..., description="Предмет, по которому проходит пара")
     teacher: Teacher = Field(..., description="Преподаватель, который ведет пару")
     classroom: Optional[ClassRoom] = Field(None, description="Аудитория, в которой проходит пара")
     group: Group = Field(..., description="Группа, у которой проходит пара")
