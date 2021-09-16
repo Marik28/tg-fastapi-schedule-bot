@@ -6,6 +6,7 @@ from aiogram.types import ReplyKeyboardMarkup
 
 from ..keyboards import create_group_list_keyboard
 from ..models import Group, Lesson, Parity
+from ..models.assignments import Assignment
 from ..services.redis_utils import update_available_groups
 from ..services.rendering import render_week_schedule, render_day_schedule
 from ..settings import settings
@@ -88,3 +89,23 @@ async def get_groups_to_choose() -> ReplyKeyboardMarkup:
     groups = await fetch_group_list()
     group_list_keyboard = create_group_list_keyboard(groups)
     return group_list_keyboard
+
+
+async def fetch_assignments_list(
+        group: str = None,
+        subgroup: int = None,
+        subject: str = None,
+) -> list[Assignment]:
+    query = {}
+    if group is not None:
+        query["group"] = group
+
+    if subgroup is not None:
+        query["subgroup"] = subgroup
+
+    if subject is not None:
+        query["subject"] = subject
+
+    assignments = await fetch(settings.assignments_endpoint, query)
+
+    return [Assignment.parse_obj(assignment) for assignment in assignments]

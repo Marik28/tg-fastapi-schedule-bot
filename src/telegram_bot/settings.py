@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     api_base_url: str = "http://localhost:5050"
     lessons_endpoint: str = "/lessons/"
     groups_endpoint: str = "/groups/"
+    assignments_endpoint: str = "/assignments/"
 
     redis_host: str = 'localhost'
     redis_port: int = 6379
