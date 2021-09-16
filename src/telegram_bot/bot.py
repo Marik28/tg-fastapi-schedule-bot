@@ -9,12 +9,11 @@ from loguru import logger
 from .keyboards import create_subgroup_list_keyboard, create_day_list_keyboard
 from .models import Parity
 from .models import Subgroup
-from .services.api import fetch_lesson_list
 from .services.api import get_week_schedule, get_groups_to_choose, get_day_schedule
 from .services.date_time_utils import get_current_week_parity, get_next_week_parity, now, get_week_day, get_week_parity
-from .services.decorators import catch_error
+from .services.decorators import catch_error, group_chosen_required
 from .services.redis_utils import get_available_groups
-from .services.rendering import render_week_schedule, day_to_string_dict, string_to_day
+from .services.rendering import day_to_string_dict, string_to_day
 from .settings import settings
 from .states import ChooseGroup, ChooseDay
 
@@ -95,48 +94,43 @@ async def subgroup_chosen(message: types.Message, state: FSMContext):
     await state.reset_state(with_data=False)
 
 
-@dp.message_handler(commands=['current_week'])
-@catch_error
-async def process_current_week_command(message: types.Message, state: FSMContext):
-    user_data = await state.get_data()
-    group = user_data["group"]
-    response = await fetch_lesson_list(parity=1, group=group)
-    reply_message = render_week_schedule(response)
-    await message.answer(reply_message, parse_mode=ParseMode.MARKDOWN)
-
-
 @dp.message_handler(commands=['numerator'])
 @catch_error
+@group_chosen_required
 async def process_numerator_command(message: types.Message, state: FSMContext):
-    reply_message, reply_markup = await get_week_schedule(Parity.NUMERATOR, state)
-    await message.answer(reply_message, parse_mode=ParseMode.MARKDOWN, reply_markup=reply_markup)
+    reply_message = await get_week_schedule(Parity.NUMERATOR, state)
+    await message.answer(reply_message, parse_mode=ParseMode.MARKDOWN)
 
 
 @dp.message_handler(commands=['denominator'])
 @catch_error
+@group_chosen_required
 async def process_denominator_command(message: types.Message, state: FSMContext):
-    reply_message, reply_markup = await get_week_schedule(Parity.DENOMINATOR, state)
-    await message.answer(reply_message, parse_mode=ParseMode.MARKDOWN, reply_markup=reply_markup)
+    reply_message = await get_week_schedule(Parity.DENOMINATOR, state)
+    await message.answer(reply_message, parse_mode=ParseMode.MARKDOWN)
 
 
 @dp.message_handler(commands=['this_week'])
 @catch_error
+@group_chosen_required
 async def process_this_week_command(message: types.Message, state: FSMContext):
     parity = get_current_week_parity()
-    reply_message, reply_markup = await get_week_schedule(parity, state)
-    await message.answer(reply_message, parse_mode=ParseMode.MARKDOWN, reply_markup=reply_markup)
+    reply_message = await get_week_schedule(parity, state)
+    await message.answer(reply_message, parse_mode=ParseMode.MARKDOWN)
 
 
 @dp.message_handler(commands=['next_week'])
 @catch_error
+@group_chosen_required
 async def process_next_week_command(message: types.Message, state: FSMContext):
     parity = get_next_week_parity()
-    reply_message, reply_markup = await get_week_schedule(parity, state)
-    await message.answer(reply_message, parse_mode=ParseMode.MARKDOWN, reply_markup=reply_markup)
+    reply_message = await get_week_schedule(parity, state)
+    await message.answer(reply_message, parse_mode=ParseMode.MARKDOWN)
 
 
 @dp.message_handler(commands='day')
 @catch_error
+@group_chosen_required
 async def process_day_command(message: types.Message, state: FSMContext):
     await ChooseDay.waiting_for_day.set()
     await message.answer("Выбери день недели", reply_markup=create_day_list_keyboard())
@@ -154,26 +148,28 @@ async def day_chosen(message: types.Message, state: FSMContext):
 
     parity = get_current_week_parity()
     day = string_to_day(day)
-    schedule, keyboard = await get_day_schedule(parity, day, state)
-    await message.answer(schedule, parse_mode=ParseMode.MARKDOWN, reply_markup=keyboard)
+    schedule = await get_day_schedule(parity, day, state)
+    await message.answer(schedule, parse_mode=ParseMode.MARKDOWN)
     await state.reset_state(with_data=False)
 
 
 @dp.message_handler(commands=["today"])
 @catch_error
+@group_chosen_required
 async def process_today_command(message: types.Message, state: FSMContext):
     current_time = now()
     day = get_week_day(current_time)
     parity = get_week_parity(current_time)
-    schedule, keyboard = await get_day_schedule(parity, day, state)
-    await message.answer(schedule, parse_mode=ParseMode.MARKDOWN, reply_markup=keyboard)
+    schedule = await get_day_schedule(parity, day, state)
+    await message.answer(schedule, parse_mode=ParseMode.MARKDOWN)
 
 
 @dp.message_handler(commands=["tomorrow"])
 @catch_error
+@group_chosen_required
 async def process_today_command(message: types.Message, state: FSMContext):
     current_time = now() + datetime.timedelta(days=1)
     day = get_week_day(current_time)
     parity = get_week_parity(current_time)
-    schedule, keyboard = await get_day_schedule(parity, day, state)
-    await message.answer(schedule, parse_mode=ParseMode.MARKDOWN, reply_markup=keyboard)
+    schedule = await get_day_schedule(parity, day, state)
+    await message.answer(schedule, parse_mode=ParseMode.MARKDOWN)
