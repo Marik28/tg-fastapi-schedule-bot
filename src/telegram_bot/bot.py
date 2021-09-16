@@ -9,7 +9,7 @@ from loguru import logger
 from .keyboards import create_subgroup_list_keyboard, create_day_list_keyboard
 from .models import Parity
 from .models import Subgroup
-from .services.api import get_week_schedule, get_groups_to_choose, get_day_schedule
+from .services.api import get_week_schedule, get_groups_to_choose, get_day_schedule, fetch_assignments_list
 from .services.date_time_utils import get_current_week_parity, get_next_week_parity, now, get_week_day, get_week_parity
 from .services.decorators import catch_error, group_chosen_required
 from .services.redis_utils import get_available_groups
@@ -173,3 +173,10 @@ async def process_today_command(message: types.Message, state: FSMContext):
     parity = get_week_parity(current_time)
     schedule = await get_day_schedule(parity, day, state)
     await message.answer(schedule, parse_mode=ParseMode.MARKDOWN)
+
+
+@dp.message_handler(commands=["tasks"])
+@catch_error
+async def process_tasks_command(message: types.Message, state: FSMContext):
+    assignments = fetch_assignments_list()
+    await message.answer(str(assignments))
