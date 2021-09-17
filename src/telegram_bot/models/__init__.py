@@ -14,6 +14,7 @@ from .lessons import (
 )
 from .subjects import (
     LessonSubject,
+    Subject,
     UsefulLink,
 )
 from .teachers import (
