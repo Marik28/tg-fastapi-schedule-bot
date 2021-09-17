@@ -9,13 +9,14 @@ from loguru import logger
 from .keyboards import create_subgroup_list_keyboard, create_day_list_keyboard
 from .models import Parity
 from .models import Subgroup
-from .services.groups import get_groups_to_choose
 from .services.assignments import get_assignments
 from .services.date_time_utils import get_current_week_parity, get_next_week_parity, now, get_week_day, get_week_parity
 from .services.decorators import catch_error, group_chosen_required
+from .services.groups import get_groups_to_choose
 from .services.redis_utils import get_available_groups
 from .services.rendering import day_to_string_dict, string_to_day
 from .services.schedule import get_week_schedule, get_day_schedule
+from .services.subjects import get_subjects
 from .settings import settings
 from .states import ChooseGroup, ChooseDay
 
@@ -188,4 +189,5 @@ async def process_tasks_command(message: types.Message, state: FSMContext):
 @dp.message_handler(commands=["links"])
 @catch_error
 async def process_links_command(message: types.Message, state: FSMContext):
-    pass
+    subjects_info = await get_subjects()
+    await message.answer(subjects_info, parse_mode=ParseMode.MARKDOWN)

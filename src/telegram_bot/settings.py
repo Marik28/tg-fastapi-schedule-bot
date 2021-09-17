@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     lessons_endpoint: str = "/lessons/"
     groups_endpoint: str = "/groups/"
     assignments_endpoint: str = "/assignments/"
+    subjects_endpoint: str = "/subjects/"
 
     redis_host: str = 'localhost'
     redis_port: int = 6379
