@@ -182,4 +182,4 @@ async def process_today_command(message: types.Message, state: FSMContext):
 @group_chosen_required
 async def process_tasks_command(message: types.Message, state: FSMContext):
     assignments = await get_assignments(state)
-    await message.answer(str(assignments))
+    await message.answer(assignments, parse_mode=ParseMode.MARKDOWN)
