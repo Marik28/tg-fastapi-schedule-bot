@@ -89,7 +89,7 @@ def render_assignments(assignments: list[Assignment]) -> str:
     for assignment in assignments:
         title = assignment.title
         is_important = '(Важно)' if assignment.is_important else ''
-        msg_bits.append(f"{'❗' if is_important else ''}*{title}*{is_important}{'❗' if is_important else ''}")
+        msg_bits.append(f"{'❗' if is_important else ''}*{title} {is_important}*{'❗' if is_important else ''}")
         subject = assignment.subject.name
         date = assignment.complete_before.strftime('%d.%m')
         description = assignment.description
