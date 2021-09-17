@@ -27,7 +27,7 @@ def render_assignments(assignments: list[Assignment]) -> str:
         description = assignment.description
         msg_bits.append(f"📝 Предмет - {subject}")
         msg_bits.append(f"📅 Выполнить до {date}")
-        if description is not None:
+        if description:
             msg_bits.append(f"Описание: {description}")
         msg_bits.append("------------------------------")
 

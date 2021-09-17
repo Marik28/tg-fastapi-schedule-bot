@@ -8,7 +8,7 @@ def render_useful_links(links: list[UsefulLink]) -> str:
         url = link.link
         description = link.description
         msg_bits.append(f"{index}. 🔗 {url}")
-        if description is not None:
+        if description:
             msg_bits.append(f"Описание - {description}")
     return '\n'.join(msg_bits)
 
