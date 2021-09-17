@@ -36,6 +36,11 @@ def catch_error(func):
 
 
 def group_chosen_required(func):
+    """
+    Декоратор, для команды бота, проверяет наличие данных в хранилище о группе и подгруппе
+    пользователя перед вызовом хендлера команды. Если данных нет, предлагает пользователю выбрать их.
+    """
+
     async def wrapper(message: types.Message, state: FSMContext, *args, **kwargs):
         user_data = await state.get_data()
         group = user_data.get("group")
