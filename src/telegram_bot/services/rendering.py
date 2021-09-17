@@ -1,6 +1,7 @@
 from typing import Union, Optional
 
 from ..models import Lesson, WeekDay, Teacher, ClassRoom, Building
+from ..models.assignments import Assignment
 
 
 def render_week_schedule(lessons: list[Lesson]) -> str:
@@ -79,3 +80,24 @@ def day_to_string(day: int) -> str:
 def building_to_string(building: Building) -> str:
     """Возвращает строку с названием корпуса"""
     return building_to_string_dict[building]
+
+
+def render_assignments(assignments: list[Assignment]) -> str:
+    if not assignments:
+        return "Заданий нет"
+
+    msg_bits = []
+    for assignment in assignments:
+        title = assignment.title
+        is_important = '(Важно)' if assignment.is_important else ''
+        msg_bits.append(f"{'❗' if is_important else ''}*{title}*{is_important}{'❗' if is_important else ''}")
+        subject = assignment.subject.name
+        date = assignment.complete_before.strftime('%d.%m')
+        description = assignment.description
+        msg_bits.append(f"📝 Предмет - {subject}")
+        msg_bits.append(f"📅 Выполнить до {date}")
+        if description is not None:
+            msg_bits.append(f"Описание: {description}")
+        msg_bits.append("------------------------------")
+
+    return '\n'.join(msg_bits)

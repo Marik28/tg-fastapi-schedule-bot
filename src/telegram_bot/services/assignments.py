@@ -1,6 +1,7 @@
 from aiogram.dispatcher import FSMContext
 
 from .api import fetch_assignments_list
+from .rendering import render_assignments
 
 
 async def get_assignments(state: FSMContext) -> str:
@@ -9,19 +10,4 @@ async def get_assignments(state: FSMContext) -> str:
     subgroup = user_data.get("subgroup")
     assignments = await fetch_assignments_list(group=group, subgroup=subgroup)
 
-    if not assignments:
-        return "Заданий нет"
-
-    msg_bits = []
-    for assignment in assignments:
-        title = assignment.title
-        is_important = '(Важно)' if assignment.is_important else ''
-        msg_bits.append(f"-----------------------{title}{is_important}-----------------------")
-        subject = assignment.subject.name
-        date = assignment.complete_before.strftime('%d.%m')
-        description = assignment.description or "-"
-        msg_bits.append(f"Предмет - {subject}")
-        msg_bits.append(f"Выполнить до {date}")
-        msg_bits.append(f"Описание: {description}")
-
-    return '\n'.join(msg_bits)
+    return render_assignments(assignments)
