@@ -182,11 +182,11 @@ async def process_today_command(message: types.Message, state: FSMContext):
 @group_chosen_required
 async def process_tasks_command(message: types.Message, state: FSMContext):
     assignments = await get_assignments(state)
-    await message.answer(assignments, parse_mode=ParseMode.MARKDOWN)
+    await message.answer(assignments, parse_mode=ParseMode.HTML)
 
 
 @dp.message_handler(commands=["links"])
 @catch_error
 async def process_links_command(message: types.Message, state: FSMContext):
     subjects_info = await get_subjects()
-    await message.answer(subjects_info, parse_mode=ParseMode.MARKDOWN)
+    await message.answer(subjects_info, parse_mode=ParseMode.HTML)

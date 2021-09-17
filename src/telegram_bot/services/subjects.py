@@ -1,3 +1,5 @@
+from aiogram.utils.markdown import hbold
+
 from ..api.subjects import fetch_subjects_list
 from ..models import Subject, UsefulLink
 
@@ -21,7 +23,7 @@ def render_subjects(subjects: list[Subject]) -> str:
     for subject in subjects:
         subject_name = subject.name
         links_info = render_useful_links(subject.useful_links)
-        msg_bits.append(f"📝 `Предмет` - {subject_name}")
+        msg_bits.append(f"📝 {hbold('Предмет')} - {subject_name}")
         msg_bits.append(links_info)
         msg_bits.append("-------------------")
 
