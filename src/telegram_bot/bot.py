@@ -14,8 +14,7 @@ from .services.date_time_utils import get_current_week_parity, get_next_week_par
 from .services.decorators import catch_error, group_chosen_required
 from .services.groups import get_groups_to_choose
 from .services.redis_utils import get_available_groups
-from .services.rendering import day_to_string_dict, string_to_day
-from .services.schedule import get_week_schedule, get_day_schedule
+from .services.schedule import get_week_schedule, get_day_schedule, day_to_string_dict, string_to_day
 from .services.subjects import get_subjects
 from .settings import settings
 from .states import ChooseGroup, ChooseDay

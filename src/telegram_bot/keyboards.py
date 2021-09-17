@@ -5,7 +5,7 @@ from aiogram.types import (
 
 from .models import Group, Subgroup
 from .models import WeekDay
-from .services.rendering import day_to_string
+from .services.schedule import day_to_string
 
 
 def create_group_list_keyboard(groups: list[Group]) -> ReplyKeyboardMarkup:
