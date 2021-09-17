@@ -1,7 +1,7 @@
 from aiogram.dispatcher import FSMContext
 
 from telegram_bot.models import Parity
-from telegram_bot.services.api import fetch_lesson_list
+from telegram_bot.api.lessons import fetch_lesson_list
 from telegram_bot.services.rendering import render_week_schedule, render_day_schedule
 
 

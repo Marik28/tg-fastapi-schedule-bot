@@ -1,7 +1,6 @@
 from typing import Union, Optional
 
-from ..models import Lesson, WeekDay, Teacher, ClassRoom, Building
-from ..models.assignments import Assignment
+from ..models import Lesson, WeekDay, Teacher, ClassRoom, Building, Assignment
 
 
 def render_week_schedule(lessons: list[Lesson]) -> str:

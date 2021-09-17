@@ -6,7 +6,7 @@ from aiogram.types import ReplyKeyboardRemove
 from aiohttp import ClientConnectorError
 from loguru import logger
 
-from telegram_bot.services.api import get_groups_to_choose
+from telegram_bot.services.groups import get_groups_to_choose
 from telegram_bot.states import ChooseGroup
 
 logger.add("../logs.log", level="INFO", rotation="2 MB", compression="zip")

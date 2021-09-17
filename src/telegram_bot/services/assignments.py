@@ -1,6 +1,6 @@
 from aiogram.dispatcher import FSMContext
 
-from .api import fetch_assignments_list
+from ..api.assignments import fetch_assignments_list
 from .rendering import render_assignments
 
 
