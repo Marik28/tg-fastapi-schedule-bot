@@ -187,6 +187,7 @@ async def process_tasks_command(message: types.Message, state: FSMContext):
 
 @dp.message_handler(commands=["links"])
 @catch_error
+@group_chosen_required
 async def process_links_command(message: types.Message, state: FSMContext):
-    subjects_info = await get_subjects()
+    subjects_info = await get_subjects(state)
     await message.answer(subjects_info, parse_mode=ParseMode.HTML)
