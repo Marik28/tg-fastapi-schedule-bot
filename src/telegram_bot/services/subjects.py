@@ -1,5 +1,7 @@
+from aiogram.dispatcher import FSMContext
 from aiogram.utils.markdown import hbold
 
+from .fsm import get_group_and_subgroup
 from ..api.subjects import fetch_subjects_list
 from ..models import Subject, UsefulLink
 
@@ -30,6 +32,7 @@ def render_subjects(subjects: list[Subject]) -> str:
     return '\n'.join(msg_bits)
 
 
-async def get_subjects() -> str:
-    subjects = await fetch_subjects_list()
+async def get_subjects(state: FSMContext) -> str:
+    group, _ = await get_group_and_subgroup(state)
+    subjects = await fetch_subjects_list(group=group)
     return render_subjects(subjects)

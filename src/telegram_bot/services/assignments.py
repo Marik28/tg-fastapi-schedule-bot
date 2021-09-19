@@ -1,14 +1,13 @@
 from aiogram.dispatcher import FSMContext
 from aiogram.utils.markdown import hbold
 
+from .fsm import get_group_and_subgroup
 from ..api.assignments import fetch_assignments_list
 from ..models import Assignment
 
 
 async def get_assignments(state: FSMContext) -> str:
-    user_data = await state.get_data()
-    group = user_data.get("group")
-    subgroup = user_data.get("subgroup")
+    group, subgroup = await get_group_and_subgroup(state)
     assignments = await fetch_assignments_list(group=group, subgroup=subgroup)
 
     return render_assignments(assignments)
