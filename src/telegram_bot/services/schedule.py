@@ -41,7 +41,7 @@ def render_day_schedule(lessons: list[Lesson], day: Union[WeekDay, int]) -> str:
     if not lessons:
         return ""
     day = day_to_string(day)
-    schedule = [f"\n\n----------------*{day.upper()}*----------------"] + \
+    schedule = [f"\n\n`{day.upper():-^30}`"] + \
                [render_lesson(lesson) for lesson in lessons]
     return '\n'.join(schedule)
 
