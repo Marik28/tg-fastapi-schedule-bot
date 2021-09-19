@@ -5,7 +5,7 @@ from ..models import Subject
 from ..settings import settings
 
 
-async def fetch_subjects_list(group: Optional[str]) -> list[Subject]:
+async def fetch_subjects_list(group: Optional[str] = None) -> list[Subject]:
     query = {
         "with_links_only": str(True),
     }
