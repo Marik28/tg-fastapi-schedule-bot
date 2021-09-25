@@ -12,6 +12,9 @@ async def fetch_assignments_list(
         archived: Optional[bool] = False,
 ) -> list[Assignment]:
     query = {}
+
+    # todo как избавиться от такого кода?
+
     if group is not None:
         query["group"] = group
 
