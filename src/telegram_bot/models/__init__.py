@@ -1,3 +1,5 @@
+# todo как управлять одним пакетом с моделями для всех приложений?
+
 from .assignments import (
     Assignment,
 )
