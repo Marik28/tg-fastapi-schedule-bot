@@ -1,3 +1,5 @@
+from typing import Optional
+
 from .base import fetch
 from ..models.assignments import Assignment
 from ..settings import settings
@@ -7,6 +9,7 @@ async def fetch_assignments_list(
         group: str = None,
         subgroup: int = None,
         subject: str = None,
+        archived: Optional[bool] = False,
 ) -> list[Assignment]:
     query = {}
     if group is not None:
@@ -18,6 +21,8 @@ async def fetch_assignments_list(
     if subject is not None:
         query["subject"] = subject
 
-    assignments = await fetch(settings.assignments_endpoint, query)
+    if archived is not None:
+        query["archived"] = str(archived)
 
+    assignments = await fetch(settings.assignments_endpoint, query)
     return [Assignment.parse_obj(assignment) for assignment in assignments]

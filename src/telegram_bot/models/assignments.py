@@ -13,6 +13,7 @@ class BaseAssignments(BaseModel):
     description: Optional[str]
     title: str
     is_important: bool
+    archived: bool
     group: Group
     subgroup: Subgroup
 
