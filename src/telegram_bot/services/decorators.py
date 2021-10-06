@@ -7,6 +7,7 @@ from aiogram.utils.exceptions import MessageIsTooLong
 from aiohttp import ClientConnectorError
 from loguru import logger
 
+from ..api.students import register_or_update
 from ..exceptions import ServerError
 from ..services.groups import get_groups_to_choose
 from ..states import ChooseGroup
@@ -60,6 +61,7 @@ def group_chosen_required(func):
             await ChooseGroup.waiting_for_group.set()
             await message.answer("Необходимо выбрать группу и подгруппу", reply_markup=group_list_keyboard)
         else:
+            await register_or_update(message.from_user, state)
             await func(message, state)
 
     return wrapper
