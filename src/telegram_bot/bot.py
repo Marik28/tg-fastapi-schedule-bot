@@ -185,6 +185,14 @@ async def process_tasks_command(message: types.Message, state: FSMContext):
     await message.answer(assignments, parse_mode=ParseMode.HTML)
 
 
+@dp.message_handler(commands=["completed_tasks"])
+@catch_error
+@group_chosen_required
+async def process_completed_tasks_command(message: types.Message, state: FSMContext):
+    assignments = await get_student_assignments(message.from_user, done=True)
+    await message.answer(assignments, parse_mode=ParseMode.HTML)
+
+
 @dp.message_handler(commands=["links"])
 @catch_error
 @group_chosen_required
