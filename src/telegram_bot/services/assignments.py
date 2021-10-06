@@ -6,6 +6,7 @@ from .fsm import get_group_and_subgroup
 from ..api.assignments import fetch_assignments_list
 from ..api.students import fetch_student_assignments
 from ..models import Assignment
+from ..models.assignments import StudentAssignment
 
 
 async def get_assignments(state: FSMContext) -> str:
@@ -15,9 +16,19 @@ async def get_assignments(state: FSMContext) -> str:
     return render_assignments(assignments)
 
 
+def patch_assignments(student_assignments: list[StudentAssignment]):
+    # fixme я хочу спать помогите
+    assignments = []
+    for student_assignment in student_assignments:
+        assignment_to_add = student_assignment.assignment
+        assignment_to_add.id = student_assignment.id
+        assignments.append(assignment_to_add)
+    return assignments
+
+
 async def get_student_assignments(user: User, done: bool = False) -> str:
     assignments = await fetch_student_assignments(telegram_user=user, done=done)
-    return render_assignments([assignment.assignment for assignment in assignments], add_completion=True, done=done)
+    return render_assignments(patch_assignments(assignments), add_completion=True, done=done)
 
 
 def render_assignments(assignments: list[Assignment], add_completion: bool = False, done: bool = False) -> str:
