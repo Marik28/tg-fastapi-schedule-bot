@@ -4,6 +4,7 @@ from typing import Optional
 from pydantic import BaseModel
 
 from .groups import Group, Subgroup
+from .students import Student
 from .subjects import LessonSubject
 
 
@@ -19,6 +20,20 @@ class BaseAssignments(BaseModel):
 
 
 class Assignment(BaseAssignments):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+
+class BaseStudentAssignment(BaseModel):
+    assignment: Assignment
+    student: Student
+    done: bool
+
+
+class StudentAssignment(BaseStudentAssignment):
+
     id: int
 
     class Config:
