@@ -6,6 +6,7 @@ from aiogram.dispatcher import Dispatcher, FSMContext
 from aiogram.types import ParseMode, ReplyKeyboardRemove
 from loguru import logger
 
+from .api.students import register_or_update, mark_completed
 from .keyboards import create_subgroup_list_keyboard, create_day_list_keyboard
 from .models import Parity
 from .models import Subgroup
@@ -82,17 +83,14 @@ async def group_chosen(message: types.Message, state: FSMContext):
 @catch_error
 async def subgroup_chosen(message: types.Message, state: FSMContext):
     unsuccessful_choice_message = "Такой подгруппы нет"
-    try:
-        subgroup = int(message.text)
-    except ValueError:
-        await message.answer(unsuccessful_choice_message)
-        return
+    subgroup = message.text
     if subgroup not in [subgroup.value for subgroup in Subgroup]:
         await message.answer(unsuccessful_choice_message)
         return
 
     await state.update_data(subgroup=subgroup)
     await message.answer("Подгруппа успешно выбрана", reply_markup=ReplyKeyboardRemove())
+    await register_or_update(message.from_user, state)
     await state.reset_state(with_data=False)
 
 
@@ -199,3 +197,21 @@ async def process_completed_tasks_command(message: types.Message, state: FSMCont
 async def process_links_command(message: types.Message, state: FSMContext):
     subjects_info = await get_subjects(state)
     await message.answer(subjects_info, parse_mode=ParseMode.HTML)
+
+
+@dp.message_handler(regexp=r"^/complete_\d+$")
+@catch_error
+@group_chosen_required
+async def process_complete_assignment(message: types.Message, state: FSMContext):
+    assignments_id = int(message.text.split("_")[-1])
+    await mark_completed(message.from_user, done=True, assignments_id=assignments_id)
+    await message.answer("Задание отмечено как выполненное")
+
+
+@dp.message_handler(regexp=r"^/uncomplete_\d+$")
+@catch_error
+@group_chosen_required
+async def process_uncomplete_assignment(message: types.Message, state: FSMContext):
+    assignments_id = int(message.text.split("_")[-1])
+    await mark_completed(message.from_user, done=False, assignments_id=assignments_id)
+    await message.answer("Задание отмечено как невыполненное")
