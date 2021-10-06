@@ -1,4 +1,4 @@
-from enum import IntEnum
+from enum import Enum
 
 from pydantic import BaseModel, Field
 
@@ -15,8 +15,8 @@ class Group(BaseGroup):
         orm_mode = True
 
 
-class Subgroup(IntEnum):
+class Subgroup(str, Enum):
     """Перечисления подгрупп"""
-    FIRST_GROUP = 1
-    SECOND_GROUP = 2
-    BOTH = 3
+    FIRST_GROUP = "1"
+    SECOND_GROUP = "2"
+    BOTH = "3"
