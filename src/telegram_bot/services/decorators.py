@@ -3,11 +3,13 @@ import traceback
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.types import ReplyKeyboardRemove
+from aiogram.utils.exceptions import MessageIsTooLong
 from aiohttp import ClientConnectorError
 from loguru import logger
 
-from telegram_bot.services.groups import get_groups_to_choose
-from telegram_bot.states import ChooseGroup
+from ..exceptions import ServerError
+from ..services.groups import get_groups_to_choose
+from ..states import ChooseGroup
 
 logger.add("../logs.log", level="INFO", rotation="2 MB", compression="zip")
 
@@ -24,6 +26,14 @@ def catch_error(func):
             msg = "Сервер не отвечает"
 
             logger.error(f"Message: {message.text}, user: {message.from_user}, error: {traceback.format_exc()}")
+        except ServerError:
+            msg = "Произошла ошибка на стороне сервера"
+            logger.error(f"Message: {message.text}, user: {message.from_user}, error: {traceback.format_exc()}")
+
+        except MessageIsTooLong:
+            msg = "Сформированное сообщение слишком длинное. Хз, что делать 🤔"
+            logger.error(f"Message: {message.text}, user: {message.from_user}, error: {traceback.format_exc()}")
+
         except Exception:
             msg = "Произошла непредвиденная ошибка"
             logger.error(f"Message: {message.text}, user: {message.from_user}, error: {traceback.format_exc()}")
